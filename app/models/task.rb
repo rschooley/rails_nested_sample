@@ -2,7 +2,6 @@ class Task < ActiveRecord::Base
   belongs_to :project
 
   validates :name, presence: true
-
   before_destroy :check_name
 
   private
@@ -10,7 +9,7 @@ class Task < ActiveRecord::Base
   def check_name
     if name == "no"
       errors.add(:base, "can't delete this task")
-      return false
+      throw(:abort)
     end
 
     return true
