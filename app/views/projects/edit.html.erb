@@ -1,0 +1,41 @@
+<div>
+  <%= notice %>
+</div>
+
+<%= form_for @project do |f| %>
+  <h2> Project </h2
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <h2> Tasks </h2>
+  <% @project.tasks.each do |task| %>
+    <div class="task">
+      <%= f.fields_for :tasks, task do |ff| %>
+        <%= ff.hidden_field :id, value: task.id %>
+        <%= ff.hidden_field :_destroy, data: { type: "destroy-field"  } %>
+        <%= ff.label :name %>
+        <%= ff.text_field :name %>
+        <%= link_to "Remove", "#", class: "btn-remove" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<%= content_for :script do %>
+  <script>
+    $(function () {
+      $(document).on('click', '.btn-remove', function (e) {
+        e.preventDefault();
+
+        $(this).siblings('[data-type="destroy-field"]').val('true');
+        $(this).closest('.task').hide();
+      });
+    });
+  </script>
+<% end %>
